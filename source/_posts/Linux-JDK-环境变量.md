@@ -19,7 +19,7 @@ Ubuntu16.04.1
 <!-- more -->
 ### 文件末尾添加
 
-```
+```shell
 #set jdk environment
 export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_21
 export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
