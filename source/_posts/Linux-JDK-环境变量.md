@@ -16,6 +16,7 @@ Ubuntu16.04.1
 
 > /etc/profile
 
+<!-- more -->
 ### 文件末尾添加
 
 ```
