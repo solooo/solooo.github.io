@@ -7,8 +7,8 @@ title: Solooo
 subtitle: 静坐常思己过，闲谈莫论人非
 description:
 author: Eric Pei
-language:
-timezone:
+language: zh-Hans
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -71,23 +71,3 @@ deploy:
   type: git
   repo: https://github.com/solooo/solooo.github.io.git
   branch: master
-
-# yilia theme config
-jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
