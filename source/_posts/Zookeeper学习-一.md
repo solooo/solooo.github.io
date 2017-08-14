@@ -10,7 +10,7 @@ tags:
 >ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or another by distributed applications. Each time they are implemented there is a lot of work that goes into fixing the bugs and race conditions that are inevitable. Because of the difficulty of implementing these kinds of services, applications initially usually skimp on them ,which make them brittle in the presence of change and difficult to manage. Even when done correctly, different implementations of these services lead to management complexity when the applications are deployed.
 
 以上是Zookeeper官网说明，Zookeeper主要提供的服务有：配置管理、名称服务、分布式同步、分组服务。
-
+<!-- more -->
 ### 使用场景
 以下是从网上一篇博客引用来的。[阅读原文](http://www.cnblogs.com/yuyijq/p/3424473.html)
 >##### 配置管理
