@@ -2,7 +2,7 @@
 title: POI 导出 Excel 自动列宽
 date: 2017-02-09 12:33:15
 categories:
-- JAVA
+- java
 
 tags:
 - poi
