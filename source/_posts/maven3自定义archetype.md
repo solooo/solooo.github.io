@@ -13,6 +13,14 @@ maven使用起来还是很方便，但默认自带的archetype配置junit版本�
 
 #### 创建普通springboot工程，项目名：Demo
 创建一个基本的springboot工程，添加依赖，集成swagger2自动生成api文档。springboot+mybatis为主要框架，使用mybatis-generator生成sql映射文件。项目配置不细说，搭建完成后添加示例代码测试OK即可。
+添加以下achetype插件：
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-archetype-plugin</artifactId>
+    <version>3.0.0</version>
+</plugin>
+```
 
 #### 创建archetype
 在*Demo*项目根目录(`{Demo-root}`)下执行命令 `mvn archetype:create-from-project`。注意此时项目`{Demo-root}/target/generated-sources/`目录下会生成**archetype**文件夹。到此步可以说已经创建了一个archetype,只是没有安装到仓库，暂时还无法使用
@@ -56,6 +64,7 @@ maven使用起来还是很方便，但默认自带的archetype配置junit版本�
     </server>
 </servers>
 ```
+其他内容修改可在src目录下找到相应的模板文件直接修改即可，例如添加默认的readme.md文件内容等。
 
 #### 安装部署
 在第三步的目录下(`target/generated-sources/archetype`),执行以下两个命令：
