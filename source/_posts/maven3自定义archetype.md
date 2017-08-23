@@ -3,9 +3,9 @@ title: maven3自定义archetype
 date: 2017-08-14 19:13:28
 categories: 
 - maven
-
 tags:
 - maven
+keywords: maven,archetype,自定义
 ---
 maven使用起来还是很方便，但默认自带的archetype配置junit版本比较老。每次创建新项目都要手动修改junit版本，所以就想着能不能自己建一个新版本出来，省得每次手动修改的麻烦。
 网上找了下教程，发现还是很简单的。maven提供了一种非常快速的创建骨架模板的方式，那就是**create-from-project**,可以让你直接使用当前项目创建archetype。下面记录一下创建过程，以普通的springboot工程为例，创建自己的archetype:
