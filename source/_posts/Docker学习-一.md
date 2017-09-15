@@ -14,7 +14,7 @@ docker学习笔记
 参考地址：[Docker CE 镜像源站](https://yq.aliyun.com/articles/110806)
 
 文档写的很清楚，具体不再详述
-
+<!-- more -->
 #### Docker国内镜像加速器
 国内访问Docker Hub速度很慢，推荐使用国内的镜像加速器。国内提供镜像加速器的服务有很多，我用的[阿里云加速器](https://cr.console.aliyun.com/#/accelerator)
 
@@ -62,15 +62,14 @@ docker ps
 启动：
 ```bash
 docker run [imageId]
-``` 
-    -it    : -i 表示交互， -t 表示终端，合起来就是交互式终端。
+    -it    : -i 表示交互; -t 表示终端; 合起来就是交互式终端
     -d     : 后台运行
-    -p     : 默认桥接网络模式，映射端口
+    -p     : 默认桥接网络模式, 映射端口
     -v     : 挂载容器和主机间的路径
     --rm   : 容器停止后删除容器
     --net=host : 网络主机模式
     --restart=always : 随着docker服务开机启动
-
+```
 上传下载
 ```bash
 ##下载
