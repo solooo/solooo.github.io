@@ -112,7 +112,7 @@ RUN buildDeps='gcc libc6-dev make' \
     && apt-get purge -y --auto-remove $buildDeps
 ```
 
-#### CMD
+##### CMD
 格式与**RUN**相同，也区分shell和exec两种格式
 
 用于指定默认的容器主进程的启动命令的
