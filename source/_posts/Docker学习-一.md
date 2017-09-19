@@ -11,6 +11,10 @@ docker学习笔记
 #### 安装Docker
 安装参考阿里云国内镜像安装，比用官方国外速度快很多。
 
+阿里云提供自动安装脚本可以很方便安装docker,shell 中执行以下命令：
+    
+    curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -
+
 参考地址：[Docker CE 镜像源站](https://yq.aliyun.com/articles/110806)
 
 文档写的很清楚，具体不再详述
