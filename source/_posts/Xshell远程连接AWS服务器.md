@@ -2,10 +2,10 @@
 title: Xshell远程连接AWS服务器
 date: 2017-06-20 17:53:14
 categories:
-- Tool
+- tool
 
 tags:
-
+- xshell
 ---
 亚马逊AWS ES服务器有一年的免费使用优惠。注册后创建实例当做远程服务器使用相当方便。比较坑的是注册必须要有信用卡，过程有点麻烦。
 <!-- more -->

@@ -4,10 +4,11 @@ title: SQL语法分解
 date: 2017-03-14 22:04:39
 
 categories:
-- java
+- technology
 
 tags:
 - sql
+- java
 ---
 最近项目中需要做一个类似SQL编辑器的功能，与PL/SQL类似，用户输入不同的sql语句，后台启用jdbc去执行并返回结果。
 

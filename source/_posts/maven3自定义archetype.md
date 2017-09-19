@@ -2,7 +2,7 @@
 title: maven3自定义archetype
 date: 2017-08-14 19:13:28
 categories: 
-- maven
+- technology
 tags:
 - maven
 keywords: maven,archetype,自定义

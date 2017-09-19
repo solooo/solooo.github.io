@@ -2,10 +2,11 @@
 title: POI 导出 Excel 自动列宽
 date: 2017-02-09 12:33:15
 categories:
-- java
+- technology
 
 tags:
 - poi
+- java
 ---
 ```
 Sheet sheet = workbook.getSheetAt(0);

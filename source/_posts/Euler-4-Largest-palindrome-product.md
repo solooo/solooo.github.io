@@ -4,7 +4,7 @@ title: Euler-4-Largest-palindrome-product
 date: 2017-03-17 13:46:01
 
 categories:
-
+- euler
 tags:
 - Euler
 ---

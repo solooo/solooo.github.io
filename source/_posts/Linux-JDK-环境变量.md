@@ -2,7 +2,7 @@
 title: Linux JDK 环境变量
 date: 2017-02-06 11:06:50
 categories:
-- Linux
+- technology
 tags:
 - Linux
 - JDK

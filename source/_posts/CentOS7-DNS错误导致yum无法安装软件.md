@@ -2,7 +2,6 @@
 title: CentOS7 DNS错误导致yum无法安装软件
 date: 2017-09-19 11:52:48
 categories:
-- Linux
 - technology
 tags:
 - Linux

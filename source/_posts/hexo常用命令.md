@@ -2,7 +2,9 @@
 title: hexo常用命令
 date: 2017-06-20 17:11:08
 categories:
+- technology
 tags:
+- hexo
 ---
 使用hexo搭建博客经常用的命令
 
