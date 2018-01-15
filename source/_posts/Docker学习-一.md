@@ -73,6 +73,7 @@ docker run [imageId]
     --rm   : 容器停止后删除容器
     --net=host : 网络主机模式
     --restart=always : 随着docker服务开机启动
+    --link={containerName}:myhost : 在容器中建立另一个容器containerName连接,myhost代替连接地址或IP
 ```
 上传下载
 ```bash
