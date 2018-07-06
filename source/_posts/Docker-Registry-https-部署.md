@@ -6,8 +6,9 @@ categories:
 tags:
 - docker
 ---
-现在 `Docker Registry` 默认都启用 `https` 访问，虽然可以通过配置其他节点的 `daemom.json` 文件来使用 `http` 访问，但如此操作比较麻烦，且限制节点仓库地址。
+现在 `Docker Registry` 默认都启用 `https` 访问，虽然可以通过配置其他节点的 `daemon.json` 文件来使用 `http` 访问，但如此操作比较麻烦，且限制节点仓库地址。
 在部署 `Kubernetes` 时，必须要有一个可以方便访问的仓库，于是参考网络资料，尝试搭建带证书的私有仓库并记录过程如下
+<!-- more -->
 #### openssl生成密钥文件
 1. 修改`openssl`配置文件，编辑`/etc/pki/tls/openssl.cnf`,在[ v3_ca ]下增加了一行：
 ```
