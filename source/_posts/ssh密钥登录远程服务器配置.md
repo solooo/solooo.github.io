@@ -14,6 +14,7 @@ tags: ssh
 ```bash
 $ ssh-keygen
 ```
+<!-- more -->
 根据提示输入文件名，或者使用默认文件名`id_rsa`，一路回车即可，待返回如下内容表示创建成功
 ```bash
 Generating public/private rsa key pair.
