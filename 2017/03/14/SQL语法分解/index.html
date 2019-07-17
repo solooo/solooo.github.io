@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,sql,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近项目中需要做一个类似SQL编辑器的功能，与PL/SQL类似，用户输入不同的sql语句，后台启用jdbc去执行并返回结果。 起初想的比较简单，用户输入一条语句，提交并执行。实现起来也很简单。但是一想，如果用户输入多个SQL怎么办？于是以分号对sql进行分割，批量提交到后台执行。结果还是有问题，就是不能保证所有的语句都是select，如果是update/insert怎么办？又或者是create/d">
+<meta name="keywords" content="java,sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL语法分解">
+<meta property="og:url" content="http://www.solooo.net/2017/03/14/SQL语法分解/index.html">
+<meta property="og:site_name" content="Solooo">
+<meta property="og:description" content="最近项目中需要做一个类似SQL编辑器的功能，与PL/SQL类似，用户输入不同的sql语句，后台启用jdbc去执行并返回结果。 起初想的比较简单，用户输入一条语句，提交并执行。实现起来也很简单。但是一想，如果用户输入多个SQL怎么办？于是以分号对sql进行分割，批量提交到后台执行。结果还是有问题，就是不能保证所有的语句都是select，如果是update/insert怎么办？又或者是create/d">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-17T04:30:48.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL语法分解">
+<meta name="twitter:description" content="最近项目中需要做一个类似SQL编辑器的功能，与PL/SQL类似，用户输入不同的sql语句，后台启用jdbc去执行并返回结果。 起初想的比较简单，用户输入一条语句，提交并执行。实现起来也很简单。但是一想，如果用户输入多个SQL怎么办？于是以分号对sql进行分割，批量提交到后台执行。结果还是有问题，就是不能保证所有的语句都是select，如果是update/insert怎么办？又或者是create/d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.solooo.net/2017/03/14/SQL语法分解/">
+
+
+
+
+
+  <title>SQL语法分解 | Solooo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Solooo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">静坐常思己过，闲谈莫论人非</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.solooo.net/2017/03/14/SQL语法分解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Solooo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SQL语法分解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-14T22:04:39+08:00">
+                2017-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/technology/" itemprop="url" rel="index">
+                    <span itemprop="name">technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近项目中需要做一个类似SQL编辑器的功能，与PL/SQL类似，用户输入不同的sql语句，后台启用jdbc去执行并返回结果。</p>
+<p>起初想的比较简单，用户输入一条语句，提交并执行。实现起来也很简单。但是一想，如果用户输入多个SQL怎么办？于是以分号对sql进行分割，批量提交到后台执行。结果还是有问题，就是不能保证所有的语句都是select，如果是update/insert怎么办？又或者是create/drop等DML语言怎么办？</p>
+<a id="more"></a>
+<p>第一套方案是先以分号对sql进行分割，然后对分割后的语句，逐条使用jsqlparser进行解析，识别出select与其他非select语句。然后对select语句进行单独处理，其他非select语句，直接执行不返回结果。结果勉强能够实现简单的功能。对于select语句由于使用了远程调用的方式，一次性返回结果不能太大，需要对查询语句进行分页处理，所以自己拼装了count语句，与分页查询，可以正常返回结果。</p>
+<p>后来又有新需求，需要在编辑器里执行存储过程的创建与执行。。。。存储过程中有分号，所以用分号分割不可行，而jsqlparser无法识别存储过程语法，无奈再次更换方案，首先要解决的是语法怎么分割的问题，对于一次性输入完成的sql来说，不存在什么问题，但在执行存储过程之前需要进行相应的设置才行，而设置需要在同一个连接中进行，所以sql需要批量同时执行，也就是一次要写多条sql，而且要正确的分割出不同的可执行的完整sql。思前想后没有什么好的解决办法，最后只能以最基本的语法，按开始与结束的字符串进行分割。</p>
+<p>按照oracle语法分析，普通的select或insert/update/delete/create table等都是一整条完整的语句，并且以分号结束，中间不会再包含分号，所以，如果以这几个关键字开头的语句，可以直接查找分号进行分割；麻烦的问题在于处理存储过程，其中会有分号，也有其他的操作语句，但会以end字符结束，所以，分析字符串如果有创建并且是创建存储过程，则以end做为结束符时行分割，按此思路进行代码实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 分割sql</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SqlParserUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Pattern pattern = Pattern.compile(<span class="string">"[^A-Za-z]"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> List&lt;String&gt; sqlKeys = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span>  &#123;</span><br><span class="line">        sqlKeys.add(<span class="string">"create"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"select"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"alter"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"insert"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"update"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"drop"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"merge"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"truncate"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"use"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"set"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"begin"</span>);</span><br><span class="line">        sqlKeys.add(<span class="string">"declare"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 找到语句开始字符，根据语句类型判断结束字符串，遍历所有单词，直至找到结束点或语句结尾，以此分割sql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> str</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">parserSql</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        String sql = str.toLowerCase().replaceAll(<span class="string">"\\s+"</span>, <span class="string">" "</span>).replaceAll(<span class="string">";"</span>, <span class="string">" ; "</span>).trim();</span><br><span class="line">        String[] strs = sql.split(<span class="string">"\\s+"</span>);</span><br><span class="line"></span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        List&lt;String&gt; sqlList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        String startStr = <span class="keyword">null</span>, endStr = <span class="keyword">null</span>, preStr = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> stack = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strs.length; i++) &#123;</span><br><span class="line">            <span class="keyword">boolean</span> clearPreStr = <span class="keyword">false</span>; <span class="comment">// 是否将 preStr 设为null</span></span><br><span class="line">            String s = strs[i];</span><br><span class="line">            <span class="keyword">if</span> (sb.length() == <span class="number">0</span> &amp;&amp; pattern.matcher(s).find()) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            sb.append(s).append(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (startStr == <span class="keyword">null</span> &amp;&amp; !sqlKeys.contains(s)) &#123;</span><br><span class="line">                <span class="keyword">int</span> len = strs.length;</span><br><span class="line">                String errorSql = <span class="string">""</span>;</span><br><span class="line">                <span class="keyword">while</span> (++i &lt; len) &#123;</span><br><span class="line">                    errorSql += strs[i];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"语法错误"</span> + errorSql);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (startStr == <span class="keyword">null</span> &amp;&amp; sqlKeys.contains(s)) &#123;</span><br><span class="line">                startStr = s;</span><br><span class="line">                endStr = <span class="string">"begin"</span>.equals(s) || <span class="string">"declare"</span>.equals(s) ? <span class="string">"end"</span> : <span class="string">";"</span>; <span class="comment">// begin开关语句以end结尾</span></span><br><span class="line">                stack++;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"create"</span>.equals(startStr) &amp;&amp; (<span class="string">"procedure"</span>.equals(s) || <span class="string">"package"</span>.equals(s)) ) &#123;</span><br><span class="line">                <span class="comment">// 创建存储过程或包时，结束符以"end"终止</span></span><br><span class="line">                String createStatement = sb.toString().trim();</span><br><span class="line">                <span class="keyword">if</span> ((<span class="string">"create or replace "</span> + s).equals(createStatement)</span><br><span class="line">                        || (<span class="string">"create "</span> + s).equals(createStatement)) &#123;</span><br><span class="line">                    endStr = <span class="string">"end"</span>;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="string">"procedure"</span>.equals(s)) &#123;</span><br><span class="line">                        stack--;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">"begin"</span>) || (!<span class="string">"end"</span>.equals(preStr) &amp;&amp; <span class="string">"loop"</span>.equals(s))) &#123;</span><br><span class="line">                <span class="comment">// begin/loop 关键字结束符都为 end, 所以需要+1</span></span><br><span class="line">                stack++;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"transaction"</span>.equals(s) &amp;&amp; <span class="string">"begin"</span>.equals(preStr)) &#123;</span><br><span class="line">                stack--;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(endStr) || i == strs.length - <span class="number">1</span>) &#123;</span><br><span class="line">                stack--;</span><br><span class="line">                <span class="keyword">if</span> (stack == <span class="number">0</span>) &#123;</span><br><span class="line">                    startStr = <span class="keyword">null</span>;</span><br><span class="line">                    clearPreStr = <span class="keyword">true</span>;</span><br><span class="line">                    <span class="keyword">if</span> (!<span class="string">";"</span>.equals(endStr) &amp;&amp; !<span class="string">";"</span>.equals(s)) &#123;</span><br><span class="line">                        sb.append(<span class="string">";"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    sqlList.add(sb.toString());</span><br><span class="line">                    sb.setLength(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 设置上一个关键字内容</span></span><br><span class="line">            <span class="keyword">if</span> (clearPreStr) &#123;</span><br><span class="line">                preStr = <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                preStr = s;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sqlList;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String sql = <span class="string">"select * from tt; \n select * from t2"</span>;</span><br><span class="line">        List&lt;String&gt; sqlList = SqlParserUtil.parserSql(sql);</span><br><span class="line">        <span class="keyword">for</span> (String s : sqlList) &#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上方法，基本可以实现oracle语法各种查询，包括存储过程的分割。以后有什么更好的思路再进行更新吧，暂且如此。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/14/Euler-3-Largest-prime-factor/" rel="next" title="Euler 3 Largest prime factor">
+                <i class="fa fa-chevron-left"></i> Euler 3 Largest prime factor
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/17/Euler-4-Largest-palindrome-product/" rel="prev" title="Euler-4-Largest-palindrome-product">
+                Euler-4-Largest-palindrome-product <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Eric</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
