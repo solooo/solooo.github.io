@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="Springboot 整合aop做日志拦截，配置很简单。  在pom.xml文件中引入aop相关的包 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt;&amp;lt;">
-<meta name="keywords" content="java">
+<meta name="description" content="（1）如果微服务有状态，如何保证多个节点内数据的一致性？ （2）缓存Cache Aside Pattern最佳实践是怎么样的？ （3）类似于滴滴司机，高密度经纬度上报，每秒500W次并发写请求，如何解决？ （4）回调网关的原理与架构？ （5）什么是三大分离的架构设计实践？ （6）站点，服务，MQ如何平滑重启，不影响服务？ （7）配置中心，如何实现按照调用方限流？ （8）微服务架构，为什么要数据库与">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Springboot AOP配置">
-<meta property="og:url" content="http://www.solooo.net/2017/12/26/Springboot-AOP配置/index.html">
+<meta property="og:title" content="10个架构问题">
+<meta property="og:url" content="http://www.solooo.net/2020/10/19/10个架构问题/index.html">
 <meta property="og:site_name" content="Solooo">
-<meta property="og:description" content="Springboot 整合aop做日志拦截，配置很简单。  在pom.xml文件中引入aop相关的包 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt;&amp;lt;">
+<meta property="og:description" content="（1）如果微服务有状态，如何保证多个节点内数据的一致性？ （2）缓存Cache Aside Pattern最佳实践是怎么样的？ （3）类似于滴滴司机，高密度经纬度上报，每秒500W次并发写请求，如何解决？ （4）回调网关的原理与架构？ （5）什么是三大分离的架构设计实践？ （6）站点，服务，MQ如何平滑重启，不影响服务？ （7）配置中心，如何实现按照调用方限流？ （8）微服务架构，为什么要数据库与">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-17T04:30:48.095Z">
+<meta property="og:updated_time" content="2020-10-19T03:00:39.621Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Springboot AOP配置">
-<meta name="twitter:description" content="Springboot 整合aop做日志拦截，配置很简单。  在pom.xml文件中引入aop相关的包 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt;&amp;lt;">
+<meta name="twitter:title" content="10个架构问题">
+<meta name="twitter:description" content="（1）如果微服务有状态，如何保证多个节点内数据的一致性？ （2）缓存Cache Aside Pattern最佳实践是怎么样的？ （3）类似于滴滴司机，高密度经纬度上报，每秒500W次并发写请求，如何解决？ （4）回调网关的原理与架构？ （5）什么是三大分离的架构设计实践？ （6）站点，服务，MQ如何平滑重启，不影响服务？ （7）配置中心，如何实现按照调用方限流？ （8）微服务架构，为什么要数据库与">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://www.solooo.net/2017/12/26/Springboot-AOP配置/">
+  <link rel="canonical" href="http://www.solooo.net/2020/10/19/10个架构问题/">
 
 
 
 
 
-  <title>Springboot AOP配置 | Solooo</title>
+  <title>10个架构问题 | Solooo</title>
   
 
 
@@ -253,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.solooo.net/2017/12/26/Springboot-AOP配置/">
+    <link itemprop="mainEntityOfPage" href="http://www.solooo.net/2020/10/19/10个架构问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Eric">
@@ -270,7 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Springboot AOP配置</h1>
+          <h1 class="post-title" itemprop="name headline">10个架构问题</h1>
         
 
         <div class="post-meta">
@@ -282,8 +281,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-26T13:25:35+08:00">
-                2017-12-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-19T11:00:17+08:00">
+                2020-10-19
               </time>
             
 
@@ -292,28 +291,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/technology/" itemprop="url" rel="index">
-                    <span itemprop="name">technology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -342,18 +319,16 @@
       
 
       
-        <p>Springboot 整合aop做日志拦截，配置很简单。</p>
-<ol>
-<li><p>在pom.xml文件中引入aop相关的包</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>aop类配置示例</p>
-<a id="more"></a>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAspect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(LogAspect.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.ht.yry.web.controller..*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">executeService</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Before</span>(<span class="string">"executeService() &amp;&amp; @annotation(option)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforePoint</span><span class="params">(JoinPoint joinPoint, ApiOperation option)</span> </span>&#123;</span><br><span class="line">       ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();</span><br><span class="line">       HttpServletRequest request = attributes.getRequest();</span><br><span class="line">       <span class="comment">//URL</span></span><br><span class="line">       logger.info(<span class="string">"url=&#123;&#125;"</span>, request.getRequestURI());</span><br><span class="line">       <span class="comment">//method</span></span><br><span class="line">       logger.info(<span class="string">"method=&#123;&#125;"</span>, request.getMethod());</span><br><span class="line">       <span class="comment">//ip</span></span><br><span class="line">       logger.info(<span class="string">"ip=&#123;&#125;"</span>,request.getRemoteAddr());</span><br><span class="line">       <span class="comment">//类方法</span></span><br><span class="line">       logger.info(<span class="string">"class=&#123;&#125; and method name = &#123;&#125;"</span>,joinPoint.getSignature().getDeclaringTypeName(),joinPoint.getSignature().getName());</span><br><span class="line">       <span class="comment">//参数</span></span><br><span class="line">       logger.info(<span class="string">"参数=&#123;&#125;"</span>,joinPoint.getArgs(), joinPoint.getArgs());</span><br><span class="line"></span><br><span class="line">       logger.info(<span class="string">"apiOption=&#123;&#125;"</span>, option.value());</span><br><span class="line"></span><br><span class="line">	   <span class="comment">// 获取方法所在类上的Api注解，例 @Api(tags="文件管理")</span></span><br><span class="line">       Api annotation = AnnotationUtils</span><br><span class="line">               .findAnnotation(joinPoint.getSignature().getDeclaringType(), Api.class);</span><br><span class="line">       logger.info(<span class="string">"api=&#123;&#125;"</span>, String.join(<span class="string">","</span>,annotation.tags()));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-
+        <pre><code>（1）如果微服务有状态，如何保证多个节点内数据的一致性？
+（2）缓存Cache Aside Pattern最佳实践是怎么样的？
+（3）类似于滴滴司机，高密度经纬度上报，每秒500W次并发写请求，如何解决？
+（4）回调网关的原理与架构？
+（5）什么是三大分离的架构设计实践？
+（6）站点，服务，MQ如何平滑重启，不影响服务？
+（7）配置中心，如何实现按照调用方限流？
+（8）微服务架构，为什么要数据库与缓存私藏？
+（9）多机房多活架构，用户如何实现就近访问？
+（10）机房迁移，缓存如何平滑迁移？</code></pre>
       
     </div>
     
@@ -368,12 +343,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-        </div>
-      
 
       
       
@@ -383,8 +352,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/08/jdk8-日期时间处理/" rel="next" title="jdk8 日期时间处理">
-                <i class="fa fa-chevron-left"></i> jdk8 日期时间处理
+              <a href="/2020/03/11/ubuntu打开文件浏览器/" rel="next" title="ubuntu打开文件浏览器">
+                <i class="fa fa-chevron-left"></i> ubuntu打开文件浏览器
               </a>
             
           </div>
@@ -392,10 +361,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/05/Docker-Registry-https-部署/" rel="prev" title="Docker Registry https 部署">
-                Docker Registry https 部署 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
